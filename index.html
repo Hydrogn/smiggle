@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="src/index.js" type="module" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <title>Smigol</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <form enctype="multipart/form-data" method="post">
+            <div class="mb-3 row">
+                <label for='topicID' class="col-xs-4 col-form-label">Topic</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" name="topic" id="topicID" placeholder="Topic" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="usernameID" class="col-xs-4 col-form-label">Username</label>
+                <div class="col-xs-8">
+                    <input type="text" class="form-control" name="username" id="usernameID" placeholder="Username" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="window.submit()">
+                Submit
+            </button>
+        </form>
+    </div>
+    <script type="text/javascript">
+        const module = {}
+    </script>
+
+    <script type="module">
+        import { createNewThread, searchThreads } from "./src/functions.js";
+
+        function submit() {
+            const username = document.getElementById('usernameID').value;
+            const topic = document.getElementById('topicID').value;
+            searchThreads(username, topic).then((returnedPromise) => {
+                console.log("Matched with Thread " + returnedPromise);
+                alert("Matched with Thread " + returnedPromise);
+            }).catch((error) => {
+                console.log(error);
+                alert(error);
+                console.log("Creating New Thread")
+                createNewThread(username,topic).then((success)=>{
+                    console.log(success)
+                    alert(success);
+                }).catch((err)=>{
+                    console.log(err)
+                    alert(err);
+                });
+            });
+        }
+        
+        window.submit = submit;
+
+    </script>
+
+</body>
+
+</html>
