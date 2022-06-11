@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,23 +7,25 @@
     <title>SMIGGLE</title>
 
     <!-- Google adsense code snippet-->
-    <script data-ad-client="ca-pub-8126085127282509" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script data-ad-client="ca-pub-8126085127282509" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
 </head>
 
 <body>
 
 
-	KACHAT <input type="text" name="otherUser" id="otherUser">
+    KACHAT <input type="text" name="otherUser" id="otherUser">
     <br>
     YOU <input type="text" name="userYou" id="userYou">
 
 
     <script type="module">
 
+
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-app.js";
-		import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-analytics.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-analytics.js";
 
         import { getDatabase, ref, set, get, child, onValue, update } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-database.js";
         // TODO: Add SDKs for Firebase products that you want to use
@@ -33,19 +33,19 @@
 
         // Your web app's Firebase configuration
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-		const firebaseConfig = {
-			apiKey: "AIzaSyAL3IwdWW7oSStxqwRpsQSqY4uHMO0v2kk",
-			authDomain: "chatsmiggle.firebaseapp.com",
-			databaseURL: "https://chatsmiggle-default-rtdb.asia-southeast1.firebasedatabase.app",
-			projectId: "chatsmiggle",
-			storageBucket: "chatsmiggle.appspot.com",
-			messagingSenderId: "107877885059",
-			appId: "1:107877885059:web:5681065701bae00f67e7b6",
-			measurementId: "G-THQEK78266"
-		};
-		
-		var userName = localStorage.getItem("userName");
-		var threadKey = localStorage.getItem("threadKey");
+        const firebaseConfig = {
+            apiKey: "AIzaSyAL3IwdWW7oSStxqwRpsQSqY4uHMO0v2kk",
+            authDomain: "chatsmiggle.firebaseapp.com",
+            databaseURL: "https://chatsmiggle-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "chatsmiggle",
+            storageBucket: "chatsmiggle.appspot.com",
+            messagingSenderId: "107877885059",
+            appId: "1:107877885059:web:5681065701bae00f67e7b6",
+            measurementId: "G-THQEK78266"
+        };
+
+        var userName = localStorage.getItem("userName");
+        var threadKey = localStorage.getItem("threadKey");
 
         // Initialize Firebase
         function wordFreq(string) {
@@ -64,30 +64,39 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const database = getDatabase(app);
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-auth.js";
+
+        const auth = getAuth();
+        signInAnonymously(auth)
+            .then(() => {
+                // Signed in..
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ...
+            });
+
 
         document.getElementById("userYou").addEventListener('keyup', writeUserData);
 
-        function writeUserData() 
-		{
-			//grabs the input of the user
+        function writeUserData() {
+            //grabs the input of the user
             var userInput = document.getElementById("userYou");
             var msgToSend = userInput.value;
-			const updates = {};
-			updates['/threads/' + threadKey + '/' + userName] = msgToSend;
-			update(ref(database), updates);
+            const updates = {};
+            updates['/threads/' + threadKey + '/' + userName] = msgToSend;
+            update(ref(database), updates);
         }
-		
-		
-		onValue(ref(database, '/threads/' + threadKey), (snapshot) => 
-		{		
-			snapshot.forEach((childSnapshot) => 
-			{
-				if(childSnapshot.key != "topic" && childSnapshot.key != userName)
-				{
-					document.getElementById("otherUser").value = childSnapshot.val();
-				}
-			});
-		});
+
+
+        onValue(ref(database, '/threads/' + threadKey), (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                if (childSnapshot.key != "topic" && childSnapshot.key != userName) {
+                    document.getElementById("otherUser").value = childSnapshot.val();
+                }
+            });
+        });
 
 
 
