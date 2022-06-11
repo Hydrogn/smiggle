@@ -30,7 +30,7 @@
                     <input type="text" class="form-control" name="username" id="usernameID" placeholder="Username" />
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="window.submit()">
+            <button type="button" class="btn btn-primary" id="submitBtn">
                 Submit
             </button>
         </form>
@@ -42,10 +42,10 @@
     <script type="module">
         import { createNewThread, searchThreads } from "./src/functions.js";
 		
-		var userName;
+        document.getElementById('submitBtn').addEventListener("click",submit);
 		
         function submit() {
-            userName = document.getElementById('usernameID').value;
+            const userName = document.getElementById('usernameID').value;
             const topic = document.getElementById('topicID').value;
             searchThreads(userName, topic).then((returnedPromise) => {
                 console.log("Matched with Thread " + returnedPromise);
@@ -69,9 +69,6 @@
                 });
             });
         }
-        
-        window.submit = submit;
-	
 
     </script>
 
