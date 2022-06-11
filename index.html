@@ -41,19 +41,27 @@
 
     <script type="module">
         import { createNewThread, searchThreads } from "./src/functions.js";
-
+		
+		var userName;
+		
         function submit() {
-            const username = document.getElementById('usernameID').value;
+            userName = document.getElementById('usernameID').value;
             const topic = document.getElementById('topicID').value;
-            searchThreads(username, topic).then((returnedPromise) => {
+            searchThreads(userName, topic).then((returnedPromise) => {
                 console.log("Matched with Thread " + returnedPromise);
                 alert("Matched with Thread " + returnedPromise);
+				localStorage.setItem("userName", userName);
+				localStorage.setItem("threadKey", returnedPromise);
+				window.location.href = "Smiggle.html";
             }).catch((error) => {
                 console.log(error);
                 alert(error);
                 console.log("Creating New Thread")
-                createNewThread(username,topic).then((success)=>{
+                createNewThread(userName, topic).then((success)=>{
                     console.log(success)
+					localStorage.setItem("userName", userName);
+					localStorage.setItem("threadKey", success);
+					window.location.href = "Smiggle.html";
                     alert(success);
                 }).catch((err)=>{
                     console.log(err)
@@ -63,6 +71,7 @@
         }
         
         window.submit = submit;
+	
 
     </script>
 
