@@ -22,6 +22,7 @@ export function searchThreads(username, topic) {
           resolve(threadKey);
 		  update(child(databaseRef, `/threads/${threadKey}`), {
 			  [username]:"Hello I am " + username,
+        userNumber: 2,
 			})
           return true;
         }
@@ -32,12 +33,14 @@ export function searchThreads(username, topic) {
 }
 
 export function createNewThread(username, topic) {
+
   return new Promise((resolve, reject) => {
     const uniqueThreadKey = push(ref(db, "/threads/")).key;
     const databaseRef = ref(db);
     set(child(databaseRef, `/threads/${uniqueThreadKey}`), {
       [username]:"Hello I am " + username,
       topic:topic,
+      userNumber: ""
     })
       .then(() => {
         resolve(uniqueThreadKey);
