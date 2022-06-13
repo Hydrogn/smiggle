@@ -29,13 +29,65 @@
 
     <script type="module">
 
+        window.onbeforeunload = closingCode;
+		function closingCode(){
+		   end();
+		   return null;
+		}
+
+        var startTime, endTime;
+        //start time
+        function timeStart() {
+            startTime = new Date();
+        };
+
+        timeStart();
+    
+        //global variables
+        var seconds, secs;
+        var minutes, hours;
+
+        //end time 
+        function timeEnd() {
+
+            endTime = new Date();
+            var timeDiff = endTime - startTime;
+            
+            // strip the ms
+            timeDiff /= 1000;
+            // get seconds
+            seconds = Math.round(timeDiff);
+
+            secs = seconds;
+            minutes = 0, hours = 0;
+
+            console.log(seconds + " seconds");
+
+
+            while(secs/60>=1){
+                if(secs/60>=1){
+                    minutes++;
+                    secs = secs-60;
+                }
+                seconds = seconds%60; 
+            }
+
+            while(minutes/60>=1){
+                if(minutes/60>=1){
+                    hours++;
+                    minutes = minutes-60;
+                }
+            }
+        //console.log(globalVariable.hours + " hours " + globalVariable.minutes + " minutes " + seconds + " seconds ");
+        }
+
         document.getElementById('endBtn').addEventListener("click",end);
 
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-analytics.js";
 
-        import { getDatabase, ref, set, get, child, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-database.js";
+        import { getDatabase, ref, set, get, child, onValue, update, remove, push } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-database.js";
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -128,6 +180,14 @@
             snapshot.forEach((childSnapshot) => {
 
                 if (childSnapshot.key == "userNumber" && childSnapshot.val() == 1 ) { //if one user disconnects, userNumber = 1 then the thread will be deleted
+                    timeEnd();
+
+                    //const uniqueThreadKey = push(ref(db, "/threads/")).key;
+                    push(ref(database, "/time/" + threadKey));
+                    
+                    set(child(ref(database), `/time/` + threadKey), {
+                    "Time": hours + " hrs " + minutes + " mins " + seconds + " seconds"
+                    })
                     console.log("ANOTHER USER HAS BEEN DISCONNECTED!!!!!!!!!!!");
                     deleteThread();
                     window.location.href = "index.html";
@@ -135,7 +195,7 @@
             })
         });
 
-
+        
     </script>
 
 </body>
